@@ -1,0 +1,41 @@
+.pointer {
+    cursor: pointer;
+}
+
+.copy_right {
+    text-align: center;
+}
+
+.logo img {
+    width: 10%;
+}
+
+@media (min-width: 768px) {
+    .logo img {
+        width: 7%;
+    }
+}
+
+@media (min-width: 992px) {
+    .logo img {
+        width: 15%;
+    }
+}
+
+@media (min-width: 1024px) {
+    .logo img {
+        width: 20%;
+    }
+}
+
+@media (min-width: 1440px) {
+    .logo img {
+        width: 15%;
+    }
+}
+
+@media (min-width: 2560px) {
+    .logo img {
+        width: 10%;
+    }
+}
