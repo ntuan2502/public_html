@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Helpers\Local;
 use App\Image;
 use App\Music;
+use App\Setting;
 use App\User;
 use App\ZingMp3;
 use Carbon\Carbon;
@@ -18,6 +19,12 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+    }
+
+    public function test()
+    {
+        $json = ZingMp3::getInfo('https://zingmp3.vn/bai-hat/Co-Chang-Trai-Viet-Len-Cay-Phan-Manh-Quynh/ZW9AZC68.html');
+        dd($json);
     }
 
     public function uploadImage(Request $request)
@@ -109,9 +116,12 @@ class AuthController extends Controller
         }
     }
 
-    public function test()
-    {
-        $json = ZingMp3::getInfo('https://zingmp3.vn/bai-hat/Co-Chang-Trai-Viet-Len-Cay-Phan-Manh-Quynh/ZW9AZC68.html');
-        dd($json);
+    public function patch_note(){
+        $patch_note = Setting::where('name', 'patch_note')->first();
+        if($patch_note){
+            return view('patch_note')->with([
+                'patch_note' => $patch_note,
+            ]);
+        }
     }
 }

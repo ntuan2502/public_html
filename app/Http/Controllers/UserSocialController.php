@@ -42,7 +42,7 @@ class UserSocialController extends Controller
             $account->user->updated_at = Carbon::now();
             $account->user->save();
 
-            $this->checkMusic($account->user->id);
+            Music::checkMusic($account->user->id);
 
             return $account->user;
         } else {
@@ -65,7 +65,7 @@ class UserSocialController extends Controller
                 $authUser->avatar = $user->avatar;
                 $authUser->save();
             }
-            $this->checkMusic($authUser->id);
+            Music::checkMusic($authUser->id);
 
             $account->user()->associate($authUser);
             $account->save();
@@ -74,29 +74,4 @@ class UserSocialController extends Controller
         }
     }
 
-    public function checkMusic($user_id)
-    {
-        $music = Music::where('user_id', $user_id)->first();
-        if ($music) {
-            $json = ZingMp3::getInfo($music->link);
-
-            $music->title = $json->title;
-            $music->artist = $json->artist;
-            $music->audio = $json->audio;
-            $music->save();
-        } else {
-            $music = new Music();
-            $music->user_id = $user_id;
-
-            // $link = 'https://zingmp3.vn/bai-hat/Kiss-The-Rain-Yiruma/ZWZD909W.html';
-            $link = 'https://zingmp3.vn/bai-hat/Happy-New-Year-A-Teens/ZW6I60C9.html';
-            $json = ZingMp3::getInfo($link);
-
-            $music->link = $json->link;
-            $music->title = $json->title;
-            $music->artist = $json->artist;
-            $music->audio = $json->audio;
-            $music->save();
-        }
-    }
 }

@@ -248,17 +248,11 @@ class AdminController extends Controller
             $update_time->name = 'update_time';
             $update_time->save();
         }
-        $mod_32bit = Setting::where('name', 'mod_32bit')->first();
-        if(!$mod_32bit){
-            $mod_32bit = new Setting;
-            $mod_32bit->name = 'mod_32bit';
-            $mod_32bit->save();
-        }
-        $mod_64bit = Setting::where('name', 'mod_64bit')->first();
-        if(!$mod_64bit){
-            $mod_64bit = new Setting;
-            $mod_64bit->name = 'mod_64bit';
-            $mod_64bit->save();
+        $patch_note = Setting::where('name', 'patch_note')->first();
+        if(!$patch_note){
+            $patch_note = new Setting;
+            $patch_note->name = 'patch_note';
+            $patch_note->save();
         }
         $background = Setting::where('name', 'background')->first();
         if(!$background){
@@ -290,25 +284,17 @@ class AdminController extends Controller
             $discord->name = 'discord';
             $discord->save();
         }
-        $messenger = Setting::where('name', 'messenger')->first();
-        if(!$messenger){
-            $messenger = new Setting;
-            $messenger->name = 'messenger';
-            $messenger->save();
-        }
         return view('admin.setting')->with([
             'download' => $download,
             'version' => $version,
             'name_version' => $name_version,
             'update_time' => $update_time,
-            'mod_32bit' => $mod_32bit,
-            'mod_64bit' => $mod_64bit,
+            'patch_note' => $patch_note,
             'background' => $background,
             'maintenance' => $maintenance,
             'facebook' => $facebook,
             'youtube' => $youtube,
             'discord' => $discord,
-            'messenger' => $messenger,
         ]);
     }
 
@@ -357,24 +343,9 @@ class AdminController extends Controller
             $background->value = $request->background;
             $background->save();
         }
-        $mod_32bit = Setting::where('name', 'mod_32bit')->first();
-        if ($request->file_mod_32bit) {
-            Local::delete($mod_32bit->value);
-            $mod_32bit->value = Local::upload($request->file_mod_32bit);
-            $mod_32bit->save();
-        } else {
-            $mod_32bit->value = $request->mod_32bit;
-            $mod_32bit->save();
-        }
-        $mod_64bit = Setting::where('name', 'mod_64bit')->first();
-        if ($request->file_mod_64bit) {
-            Local::delete($mod_64bit->value);
-            $mod_64bit->value = Local::upload($request->file_mod_64bit);
-            $mod_64bit->save();
-        } else {
-            $mod_64bit->value = $request->mod_64bit;
-            $mod_64bit->save();
-        }
+        $patch_note = Setting::where('name', 'patch_note')->first();
+        $patch_note->value = $request->patch_note;
+        $patch_note->save();
         return redirect()->back()->with([
             'success' => 'Cập nhật setting thành công!',
         ]);

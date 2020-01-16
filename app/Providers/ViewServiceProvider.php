@@ -79,17 +79,11 @@ class ViewServiceProvider extends ServiceProvider
                 $update_time->name = 'update_time';
                 $update_time->save();
             }
-            $mod_32bit = Setting::where('name', 'mod_32bit')->first();
-            if (!$mod_32bit) {
-                $mod_32bit = new Setting;
-                $mod_32bit->name = 'mod_32bit';
-                $mod_32bit->save();
-            }
-            $mod_64bit = Setting::where('name', 'mod_64bit')->first();
-            if (!$mod_64bit) {
-                $mod_64bit = new Setting;
-                $mod_64bit->name = 'mod_64bit';
-                $mod_64bit->save();
+            $patch_note = Setting::where('name', 'patch_note')->first();
+            if (!$patch_note) {
+                $patch_note = new Setting;
+                $patch_note->name = 'patch_note';
+                $patch_note->save();
             }
 
             #endregion

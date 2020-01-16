@@ -21,8 +21,7 @@ class HomeController extends Controller
         $name_version = Setting::where('name', 'name_version')->first();
         $update_time = Setting::where('name', 'update_time')->first();
         $version = Setting::where('name', 'version')->first();
-        $mod_32bit = Setting::where('name', 'mod_32bit')->first();
-        $mod_64bit = Setting::where('name', 'mod_64bit')->first();
+        $patch_note = Setting::where('name', 'patch_note')->first();
         $download = Setting::where('name', 'download')->first();
         $posts = Post::where('status', 1);
         $page = $request->query('page') ? $request->query('page') : 1;
@@ -46,8 +45,7 @@ class HomeController extends Controller
             'name_version' => $name_version,
             'update_time' => $update_time,
             'version' => $version,
-            'mod_32bit' => $mod_32bit,
-            'mod_64bit' => $mod_64bit,
+            'patch_note' => $patch_note,
             'download' => $download,
             'posts' => $posts,
             'fullUrl' => $fullUrl,
@@ -81,6 +79,7 @@ class HomeController extends Controller
                 'status' => 0,
             ]);
         } else {
+            Music::checkMusic(Auth::user()->id);
             return response()->json([
                 'status' => 1,
                 'redirect' => '/admin'
@@ -88,35 +87,7 @@ class HomeController extends Controller
         }
     }
 
-    public function page_loginP(Request $request)
-    {
-        $userdata = array(
-            'email'     => $request->email,
-            'password'  => $request->password
-        );
-
-        if (Auth::attempt($userdata) === false) {
-            return response()->json([
-                'status' => 0,
-            ]);
-        } else {
-            return response()->json([
-                'status' => 1,
-                'redirect' => $request->url
-            ]);
-        }
-    }
-
-
     public function logoutP(Request $request)
-    {
-        Auth::logout();
-        return response()->json([
-            'redirect' => $request->url,
-        ]);
-    }
-
-    public function page_logoutP(Request $request)
     {
         Auth::logout();
         return response()->json([
@@ -212,6 +183,8 @@ class HomeController extends Controller
             'slug' => $post_slug,
         ])->first();
         if ($post) {
+            $post->view++;
+            $post->save();
             return view('post')->with([
                 'post' => $post
             ]);

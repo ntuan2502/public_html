@@ -19,7 +19,9 @@ Route::get('/account', 'AuthController@getAccount');
 Route::post('/zingMp3_post', 'AuthController@zingMp3_post');
 Route::post('/change_password_post', 'AuthController@change_password_post');
 Route::post('/change_infomation_post', 'AuthController@change_infomation_post');
-Route::get('/test', 'AuthController@test');
+// Route::get('/test', 'AuthController@test');
+
+Route::get('/patch_note', 'AuthController@patch_note');
 
 Route::get('/', 'HomeController@index');
 
@@ -88,8 +90,8 @@ Route::group(['prefix' => 'login'], function () {
     });
 });
 
-Route::post('/page_login', 'HomeController@page_loginP');
-Route::post('/page_logout', 'HomeController@page_logoutP');
+// Route::post('/page_login', 'HomeController@page_loginP');
+// Route::post('/page_logout', 'HomeController@page_logoutP');
 
 Route::group(['prefix' => 'logout'], function () {
     Route::post('/', 'HomeController@logoutP')->name('logout');

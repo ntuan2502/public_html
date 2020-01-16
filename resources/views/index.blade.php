@@ -47,7 +47,7 @@
                 <div class="col-xl-12">
                     <div class="slider_text text-center ">
                         @if($download->value == 'on')
-                        <a class="pointer" data-toggle="modal" data-target="#download_Mod">
+                        <a href="/patch_note">
                             <h3>Tải mod</h3>
                         </a>
                         @else
@@ -72,27 +72,6 @@
 </div>
 
 @if($vsp_user)
-<div class="modal fade" id="download_Mod" tabindex="-1" role="dialog" aria-labelledby="download_ModLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="download_ModLabel">Lựa chọn phiên bản phù hợp với cấu hình của bạn</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                32bit XML: <a href="{{$mod_32bit->value}}" class="btn btn-primary">Tải xuống</a>
-                <hr>
-                64bit XML: <a href="{{$mod_64bit->value}}" class="btn btn-success">Tải xuống</a>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="music_area">
     <div class="container">
         <div class="row align-items-center justify-content-center">

@@ -121,29 +121,9 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label" for="mod_32bit">Mod 32bit</label>
-                            <div class="col-sm-4">
-                                <input type="text" id="mod_32bit" name="mod_32bit" class="form-control" value="{{$mod_32bit->value}}">
-                            </div>
-                            <label class="col-sm-2 col-form-label" for="file_mod_32bit">Upload mod 32bit</label>
-                            <div class="col-sm-4">
-                                <div class="custom-file">
-                                    <input id="file_mod_32bit" name="file_mod_32bit" type="file" class="custom-file-input">
-                                    <label for="file_mod_32bit" id="name_file_mod_32bit" class="custom-file-label">Choose file...</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label" for="mod_64bit">Mod 64bit</label>
-                            <div class="col-sm-4">
-                                <input type="text" id="mod_64bit" name="mod_64bit" class="form-control" value="{{$mod_64bit->value}}">
-                            </div>
-                            <label class="col-sm-2 col-form-label" for="file_mod_64bit">Upload mod 64bit</label>
-                            <div class="col-sm-4">
-                                <div class="custom-file">
-                                    <input id="file_mod_64bit" name="file_mod_64bit" type="file" class="custom-file-input">
-                                    <label for="file_mod_64bit" id="name_file_mod_64bit" class="custom-file-label">Choose file...</label>
-                                </div>
+                            <label class="col-sm-2 col-form-label" for="patch_note">Patch Note</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" name="patch_note" id="patch_note">{{$patch_note->value}}</textarea>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -163,6 +143,48 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script>
+    function uploadImage(image) {
+        var data = new FormData();
+        data.append("image", image);
+        $.ajax({
+            url: '/image/upload',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: data,
+            type: "post",
+            success: function (data) {
+                var image = $('<img>').attr({
+                    src: window.location.protocol + '//' + window.location.hostname + data.url,
+                    width: '100%'
+                });
+                $('#content').summernote("insertNode", image[0]);
+                console.log('Upload hình thành công! ' + window.location.protocol + '//' + window.location.hostname + data.url);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+
+    function deleteImage(url) {
+        var data = new FormData();
+        data.append("url", url);
+        $.ajax({
+            url: '/image/delete',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: data,
+            type: "post",
+            success: function (data) {
+                console.log('Xoá hình thành công! ' + data.url);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
     $(document).ready(function() {
         $('input[name="update_time"]').daterangepicker({
             singleDatePicker: true,
@@ -171,17 +193,32 @@
                 format: 'DD/MM/YYYY'
             }
         });
-        $('#file_mod_32bit').on('change', function() {
-            let fileName = $(this).val().split('\\').pop();
-            $(this).next('#name_file_mod_32bit').addClass("selected").html(fileName);
-        });
-        $('#file_mod_64bit').on('change', function() {
-            let fileName = $(this).val().split('\\').pop();
-            $(this).next('#name_file_mod_64bit').addClass("selected").html(fileName);
-        });
+
         $('#file_background').on('change', function() {
             let fileName = $(this).val().split('\\').pop();
             $(this).next('#name_file_background').addClass("selected").html(fileName);
+        });
+
+        $('#patch_note').summernote({
+            height: 300, // set editor height
+            minHeight: null, // set minimum height of editor
+            maxHeight: null, // set maximum height of editor
+            callbacks: {
+                onImageUpload: function (image) {
+                    uploadImage(image[0]);
+                },
+                onMediaDelete: function ($target, $editable) {
+                    deleteImage($target.attr('src'));
+
+                },
+                onPaste: function (e) {
+                    var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+                    e.preventDefault();
+                    setTimeout(function () {
+                        document.execCommand('insertText', false, bufferText);
+                    }, 10);
+                }
+            }
         });
     });
 </script>
